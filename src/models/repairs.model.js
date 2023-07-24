@@ -14,7 +14,7 @@ const Repairs = db.define('repairs', {
   },
 
   status: {
-    type: DataTypes.ENUM('pending', 'completed', 'canceled'),
+    type: DataTypes.ENUM('pending', 'completed', 'cancelled'),
     allowNull: false,
     defaultValue: 'pending',
   },

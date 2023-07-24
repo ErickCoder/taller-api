@@ -25,7 +25,7 @@ exports.showMotos = async (req, res) => {
   try {
     const repairs = await Repairs.findAll({
       where: {
-        status: ['pending', 'completed'],
+        status: "pending",
       },
     });
 
