@@ -20,7 +20,7 @@ const Users = db.define('users', {
     unique: true,
   },
   password: {
-    type: DataTypes.STRING(50),
+    type: DataTypes.STRING,
     allowNull: false,
   },
   role: {

@@ -1,4 +1,5 @@
 const Users = require('../models/users.model');
+const AppError = require('../utils/appError');
 
 exports.validUser = async (req, res, next) => {
   try {
@@ -10,10 +11,11 @@ exports.validUser = async (req, res, next) => {
     });
 
     if (!users) {
-      return res.status(404).json({
+   /*    return res.status(404).json({
         status: 'error',
         message: `User with id: ${id} not found`,
-      });
+      }); */
+      return next(new AppError(`User with id: ${id} not foundddddddd`,404))
     }
     req.users = users;
     next();
