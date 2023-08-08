@@ -1,15 +1,18 @@
 const Repairs = require('../models/repairs.model');
+/* const Users= require('../models/users.model') */
 
 exports.createRepair = async (req, res) => {
   try {
-    const { date, userid } = req.body;
+    const { date, userid, description, motorsNumbers } = req.body;
     const repair = await Repairs.create({
       date,
       userid,
+      description,
+      motorsNumbers
     });
     res.status(201).json({
       status: 'success',
-      message: 'User has been created',
+      message: 'Repair has been created',
       repair,
     });
   } catch (error) {
@@ -25,7 +28,7 @@ exports.showMotos = async (req, res) => {
   try {
     const repairs = await Repairs.findAll({
       where: {
-        status: "pending",
+        status: 'pending',
       },
     });
 
@@ -46,29 +49,18 @@ exports.showMotos = async (req, res) => {
 
 exports.FindRepairsPendingByID = async (req, res) => {
   try {
-    const { id } = req.params;
-    const repair = await Repairs.findOne({
-      where: {
-        id,
-        status: 'pending',
-      },
-    });
-
-    if (!repair) {
-      return res.status(404).json({
-        status: 'Error',
-        message: `Repair with id:${id} not found`,
-      });
-    }
-
+    const { repairs } = req;
+  
     res.status(200).json({
-      message: `Repair with id: ${id}`,
-      repair,
+      message: `Repair with id:${repairs.id}`,
+      repairs,
     });
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       status: 'Fail',
       message: 'Something went wrong',
+      error
     });
   }
 };
@@ -100,7 +92,7 @@ exports.updateStatus = async (req, res) => {
     console.log(error);
     res.status(500).json({
       status: 'Fail',
-      message: 'Error editing user',
+      message: 'Error editing repair',
     });
   }
 };

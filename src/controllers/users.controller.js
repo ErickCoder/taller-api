@@ -1,5 +1,7 @@
 const Users = require('../models/users.model');
 
+const bcrypt = require('bcrypt');
+
 exports.findAllUsers = async (req, res) => {
   try {
     const users = await Users.findAll({
@@ -24,24 +26,26 @@ exports.findAllUsers = async (req, res) => {
 
 exports.FindUserByID = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { users } = req;
+    /*     const { id } = req.params;
     const user = await Users.findOne({
       where: {
         id,
         status: 'available',
       },
-    });
+    }); */
 
-    if (!user) {
+    /*     if (!user) {
       return res.status(404).json({
         status: 'Error',
         message: `User with id: ${id} not found`,
       });
-    }
+    } */
 
     res.status(200).json({
       message: `hello from the get route with id: ${id}`,
       id,
+      users,
     });
   } catch (error) {
     res.status(500).json({
@@ -54,16 +58,24 @@ exports.FindUserByID = async (req, res) => {
 exports.createUser = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
+
+    const salt = await bcrypt.genSalt(13);
+    const encryptedPassword = await bcrypt.hash(password, salt);
     const user = await Users.create({
       name,
       email,
-      password,
+      password: encryptedPassword,
       role,
     });
     res.status(201).json({
       status: 'success',
       message: 'User has been created',
-      user,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     });
   } catch (error) {
     console.log(error);
