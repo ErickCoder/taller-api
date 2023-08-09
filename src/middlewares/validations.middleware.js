@@ -13,16 +13,28 @@ const valideFields = (req, res, next) => {
 
 exports.userValidations = [
   body('name').notEmpty().withMessage('name is required'),
-  body('email').notEmpty().withMessage('email is required').isEmail().withMessage('Insert a valid email'),
-  body('password').isLength({min:6}).withMessage('password needs to be at least 6 characters'),
-  valideFields
+  body('email')
+    .notEmpty()
+    .withMessage('email is required')
+    .isEmail()
+    .withMessage('Insert a valid email'),
+  body('password')
+    .isLength({ min: 6 })
+    .withMessage('password needs to be at least 6 characters'),
+  valideFields,
 ];
 
 exports.repairValidations = [
   body('date').notEmpty().withMessage('date is required'),
   body('motorsNumbers').notEmpty().withMessage('motorsNumber is required'),
-  body('description').isLength({min:10}).withMessage('description needs to be at least 10 characters'),
-  valideFields
+  body('description')
+    .isLength({ min: 10 })
+    .withMessage('description needs to be at least 10 characters'),
+  valideFields,
 ];
 
-
+exports.loginUserValidations = [
+  body('email').notEmpty().withMessage('email is required'),
+  body('password').notEmpty().withMessage('password is required'),
+  valideFields,
+];
