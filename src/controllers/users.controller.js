@@ -2,15 +2,24 @@ const Users = require('../models/users.model');
 const catchAsync = require('../utils/catchAsync');
 const bcrypt = require('bcrypt');
 const generateJWT = require('../utils/jwt');
+const Repair = require('../models/repairs.model');
 
-exports.findAllUsers = catchAsync(async (req, res) => {
+exports.findAllUsers = catchAsync(async (req, res, next) => {
   /*  try { */
   const users = await Users.findAll({
     where: {
       status: 'available',
+      
     },
+    attributes:['id','name', 'email', 'role','status'],
+    include: [
+      {
+      model: Repair,
+
+    }
+    ],
   });
-  res.status(200).json({
+  return res.status(200).json({
     status: 'success',
     message: 'List of users',
     results: users.length,

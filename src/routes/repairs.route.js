@@ -4,14 +4,19 @@ const repairsController = require('./../controllers/repairs.controller');
 
 //middleware
 const repairsMiddleware = require('./../middlewares/repairs.middleware');
-const validateMiddleware = require('./../middlewares/validations.middleware')
+const validateMiddleware = require('./../middlewares/validations.middleware');
+const authMiddleware = require('./../middlewares/auth.middleware');
 
 const router = express.Router();
 
+router.use(authMiddleware.protect);
+
 router
-  .route('/')
-  .post(validateMiddleware.repairValidations,repairsController.createRepair)
-  .get(repairsController.showMotos);
+  .route('/').get(authMiddleware.restrictTo('employee'), repairsController.showMotos)
+  .post(validateMiddleware.repairValidations, repairsController.createRepair)
+  
+
+router.use(authMiddleware.restrictTo('employee'));
 
 router
   .route('/:id')

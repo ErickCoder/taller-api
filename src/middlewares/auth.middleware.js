@@ -33,6 +33,31 @@ exports.protect = catchAsync(async (req, res, next) => {
       new AppError('The owner of this token is not longer available', 401)
     );
   }
-  req.session = user;
+  req.sessionUser = user;
+
   next();
 });
+
+/* exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.sessionUser.role)) {
+      return res.status(403).json({
+        status: 'error',
+        message: 'you do not have permission to do that',
+      })
+    }
+    next()
+  }
+} */
+
+exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.sessionUser.role)) {
+      return next(
+        new AppError('You do not have permission to perfom this action.!', 403)
+      );
+    }
+
+    next();
+  };
+};

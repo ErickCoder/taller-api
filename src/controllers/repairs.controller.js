@@ -1,5 +1,5 @@
 const Repairs = require('../models/repairs.model');
-/* const Users= require('../models/users.model') */
+const Users= require('../models/users.model')
 
 exports.createRepair = async (req, res) => {
   try {
@@ -30,6 +30,13 @@ exports.showMotos = async (req, res) => {
       where: {
         status: 'pending',
       },
+      include: [
+        {
+          model: Users,
+          attributes: ['id', 'name', 'email', 'role', 'status']
+        }
+        
+      ]
     });
 
     res.status(200).json({
